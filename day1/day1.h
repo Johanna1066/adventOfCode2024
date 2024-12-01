@@ -2,8 +2,6 @@
 #ifndef DAY1_H
 #define DAY1_H
 
-#include <fstream>
-
-void readFile(std::ifstream &input);
+void day1();
 
 #endif // DAY1_H
