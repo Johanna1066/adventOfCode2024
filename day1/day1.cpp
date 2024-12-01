@@ -4,11 +4,35 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <algorithm>
+
+
+void part1(std::vector<int> left, std::vector<int> right){
+    std::sort(left.begin(), left.end());
+    std::sort(right.begin(), right.end());
+
+    int sum{};
+    for (int i =0; i < left.size(); i++){
+        int diff = abs(left[i] - right[i]);
+        sum += diff;
+    }
+
+    std::cout << "Answer part 1: " << sum << std::endl;
+    return;
+}
+
+void part2(std::vector<int> left, std::vector<int> right){
+    int sum{};
+
+    for (int num:left){
+        int occurences = std::count(right.begin(),right.end(),num);
+        sum += (num*occurences);
+    }
+    std::cout << "Answer part 2: " << sum << std::endl;
+}
 
 void day1() {
-
-    std::cout << "Opening file..." << std::endl;
-    std::ifstream input("../day1/testInputDay1.txt");
+    std::ifstream input("../day1/inputDay1.txt");
 
     if (!input) {
         std::cerr << "Failed to open file." << std::endl;
@@ -32,7 +56,6 @@ void day1() {
     
                 ss >> temp;
     
-                /* Checking the given word is integer or not */
                 if (std::stringstream(temp) >> found){
                     if(leftFilled) {
                         left.push_back(found);
@@ -41,11 +64,11 @@ void day1() {
                         right.push_back(found);
                     }
                 }
-    
-                /* To save from space at the end of string */
                 temp = "";
         }
     }
-    std::cout << "Finished reading file." << std::endl;
+
+    part1(left, right);
+    part2(left,right);
     return;
 }
