@@ -16,7 +16,6 @@ bool part1(std::vector<int> row){
         increasing = false;
 
     for(auto a : row){
-        //std::cout << "last " << last << " - current: " << current << std::endl;
 
         if(first)
         {
@@ -37,7 +36,6 @@ bool part1(std::vector<int> row){
 
         if(abs(current-last) > 3 )
         {
-            //std::cout << "---" << last << " and " << current << " --- false" << std::endl;
             return false;
         }
 
@@ -46,8 +44,17 @@ bool part1(std::vector<int> row){
     return true;
 }
 
-void part2(){
-    return;
+bool part2(std::vector<int> row){
+    for (int i = 0; i < row.size(); i++){
+        std::vector<int> temp = row; 
+
+        temp.erase(temp.begin() + i);
+
+        if(part1(temp)){
+            return true;
+        }
+    }
+    return false;
 }
 
 void day2() {
@@ -59,10 +66,9 @@ void day2() {
     }
 
     std::string line;
-    int sum{};
+    int sum1{}, sum2{};
 
     while (std::getline(input, line)) {
-        //std::cout << "\n Line: " << line << std::endl;
         std::vector<int> row{};
         std::stringstream ss;
         std::string temp;
@@ -80,10 +86,16 @@ void day2() {
             temp = "";
         }
         
-        if(part1(row))
-            sum++;
+        if(part1(row)){
+            sum1++;
+            sum2++;
+        }
+        else if (part2(row)){
+            sum2++;
+        }
     }
 
-    std::cout << "Part 1: " << sum << std::endl;
+    std::cout << "Part 1: " << sum1 << std::endl;
+    std::cout << "Part 2: " << sum2 << std::endl;
     return;
 }
