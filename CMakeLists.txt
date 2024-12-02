@@ -11,3 +11,4 @@ add_subdirectory(day1)
 
 # Link the day1 library to the main executable
 target_link_libraries(AoC PRIVATE day1)
+target_link_libraries(AoC PRIVATE day2)

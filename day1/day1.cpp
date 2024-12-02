@@ -6,7 +6,6 @@
 #include <sstream>
 #include <algorithm>
 
-
 void part1(std::vector<int> left, std::vector<int> right){
     std::sort(left.begin(), left.end());
     std::sort(right.begin(), right.end());
