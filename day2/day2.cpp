@@ -1,24 +1,25 @@
+// day2.cpp
+// https://adventofcode.com/2024/day/2
+
 #include "day2.h"
-#include <fstream>
+#include "../functions.h"
 #include <iostream>
-#include <string>
 #include <vector>
+#include <string>
 #include <sstream>
 #include <algorithm>
 
-bool part1(std::vector<int> row){
+bool part1(const std::vector<int>& row) {
     int current{0}, last{0};
     bool first{true};
     bool increasing{true};
-    
-    //Check of the current row is increasing or decreasing
-    if(row[0] > row[1])
+
+    // Check if the current row is increasing or decreasing
+    if (row[0] > row[1])
         increasing = false;
 
-    for(auto a : row){
-
-        if(first)
-        {
+    for (auto a : row) {
+        if (first) {
             first = false;
             last = a;
             continue;
@@ -26,76 +27,59 @@ bool part1(std::vector<int> row){
 
         current = a;
 
-        if(increasing){
-            if(current <= last)
+        if (increasing) {
+            if (current <= last)
                 return false;
-        } else{
-            if(current >= last)
+        } else {
+            if (current >= last)
                 return false;
         }
 
-        if(abs(current-last) > 3 )
-        {
+        if (abs(current - last) > 3) {
             return false;
         }
 
-        last = current; 
+        last = current;
     }
     return true;
 }
 
-bool part2(std::vector<int> row){
-    for (int i = 0; i < row.size(); i++){
-        std::vector<int> temp = row; 
-
+// Function to check if a row is valid according to part2's rules
+bool part2(std::vector<int> row) {
+    for (int i = 0; i < row.size(); i++) {
+        std::vector<int> temp = row;
         temp.erase(temp.begin() + i);
-
-        if(part1(temp)){
+        if (part1(temp)) {
             return true;
         }
     }
     return false;
 }
 
+// Main function for day2
 void day2() {
-    std::ifstream input("../day2/inputDay2.txt");
-
-    if (!input) {
-        std::cerr << "Failed to open file." << std::endl;
-        return ;
-    }
+    std::string fileURL = "../day2/inputDay2.txt";
+    std::ifstream input = readFile(fileURL);
 
     std::string line;
     int sum1{}, sum2{};
 
     while (std::getline(input, line)) {
         std::vector<int> row{};
-        std::stringstream ss;
-        std::string temp;
-        int found;
-
-        ss << line;
-
-        while (!ss.eof()) {
-    
-            ss >> temp;
-    
-            if (std::stringstream(temp) >> found){
-                row.push_back(found);
-            }
-            temp = "";
+        std::stringstream ss(line);
+        int value;
+        while (ss >> value) {
+            row.push_back(value);
         }
-        
-        if(part1(row)){
+
+        if (part1(row)) {
             sum1++;
-            sum2++;
         }
-        else if (part2(row)){
+        if (part2(row)) {
             sum2++;
         }
     }
 
-    std::cout << "Part 1: " << sum1 << std::endl;
-    std::cout << "Part 2: " << sum2 << std::endl;
-    return;
+    std::cout << "Sum1: " << sum1 << std::endl;
+    std::cout << "Sum2: " << sum2 << std::endl;
 }
