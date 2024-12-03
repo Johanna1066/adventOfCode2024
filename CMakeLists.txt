@@ -9,13 +9,13 @@ include_directories(include)
 # Add the executable
 add_executable(AoC main.cpp)
 
-# Add the day1 and day2 directories
+# Add the daily directories
 # add_subdirectory(day1)
 # add_subdirectory(day2)
 # add_subdirectory(day3)
 add_subdirectory(day4)
 
-# Link the day1 and day2 libraries to the main executable
+# Link the daily libraries to the main executable
 # target_link_libraries(AoC PRIVATE day1)
 # target_link_libraries(AoC PRIVATE day2)
 # target_link_libraries(AoC PRIVATE day3)
