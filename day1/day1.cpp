@@ -37,17 +37,13 @@ void part2(const std::vector<int>& left, const std::vector<int>& right) {
 
 void day1() {
     std::string fileURL = "../day1/inputDay1.txt";
-    std::ifstream inputFile = readFile(fileURL);
-    if (!inputFile) {
-        std::cerr << "Failed to open file." << std::endl;
-        return;
-    }
+    std::ifstream input = readFile(fileURL);
 
     std::string line;
     std::vector<int> left;
     std::vector<int> right;
 
-    while (std::getline(inputFile, line)) {
+    while (std::getline(input, line)) {
         std::stringstream ss(line);
         bool leftFilled = true;
         int found;
@@ -65,4 +61,6 @@ void day1() {
 
     part1(left, right);
     part2(left, right);
+
+    input.close();
 }

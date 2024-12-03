@@ -82,4 +82,6 @@ void day2() {
 
     std::cout << "Sum1: " << sum1 << std::endl;
     std::cout << "Sum2: " << sum2 << std::endl;
+
+    input.close();
 }
