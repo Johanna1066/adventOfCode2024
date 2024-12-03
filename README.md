@@ -5,7 +5,7 @@ https://adventofcode.com/2024/
 
 # Usage
 
-X below represent the number of the day you want to run.
+the X below represent the number of the day you want to run.
 
 1. go to CMakeLists and add the subdirectories and link the libraries for day X.
 
