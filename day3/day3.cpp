@@ -7,12 +7,10 @@
 #include <string>
 #include <regex>
 
-int part1(std::string line)
-{
+int part1(std::string line) {
     int sum{};
     std::string newLine;
-    for (auto &a : line)
-    {
+    for (auto &a : line) {
         if (a == 'm')
             newLine += ' ';
         newLine += a;
@@ -24,16 +22,14 @@ int part1(std::string line)
 
     std::smatch matches;
     std::string::const_iterator searchStart(newLine.cbegin());
-    while (std::regex_search(searchStart, newLine.cend(), matches, matchExpression))
-    {
+    while (std::regex_search(searchStart, newLine.cend(), matches, matchExpression)){
         std::cout << "match: " << matches.str() << std::endl; 
         std::string current = matches.str();
-        if (matches.size() == 3)
-        { // Ensure there are 3 matches: the whole match and two groups
+        if (matches.size() == 3){ // Ensure there are 3 matches: the whole match and two groups
             int firstInt = std::stoi(matches[1].str());
             int secondInt = std::stoi(matches[2].str());
             int product = firstInt * secondInt;
-            sum += product; // Accumulate the product            }
+            sum += product; 
 
             searchStart = matches.suffix().first;
         }
@@ -42,9 +38,8 @@ int part1(std::string line)
     return sum;
 }
 
-bool part2()
-{
-    return true;
+int part2(std::string line) {
+    return 1;
 }
 
 void day3()
@@ -53,12 +48,11 @@ void day3()
     std::ifstream input = readFile(fileURL);
 
     std::string line;
-    int sum{};
+    int sum1{};
 
-    while (std::getline(input, line))
-    {
-        sum += part1(line);
+    while (std::getline(input, line)){
+        sum1 += part1(line);
     }
 
-    std::cout << "part 1: " << sum << std::endl;
+    std::cout << "part 1: " << sum1 << std::endl;
 }
