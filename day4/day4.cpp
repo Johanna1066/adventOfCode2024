@@ -5,69 +5,16 @@
 #include "../functions.h"
 #include <iostream>
 #include <vector>
-#include <string>
 
-int searchLeftRight(std::vector<std::vector<char>>& lines, int x, int y){
-    int sum{};
-    if (lines[y][x-1] == 'M' && lines[y][x-2] == 'A' && lines[y][x-3] == 'S'){
-        //std::cout << "found XMAS LEFT at: x = " << (x-2) << ", y = " << (y-2) <<std::endl;
-        sum++;
-    }
-      
 
-    if (lines[y][x+1] == 'M' && lines[y][x+2] == 'A' && lines[y][x+3] == 'S'){
-        //std::cout << "found XMAS RIGHT at: x = " << (x-2) << ", y = " << (y-2) <<std::endl;
-        sum++;
-    }
-
-    return sum;
-}
-
-int searchUpDown(std::vector<std::vector<char>>& lines, int x, int y){
-    int sum{};
-    if (lines[y-1][x] == 'M' && lines[y-2][x] == 'A' && lines[y-3][x] == 'S'){
-        //std::cout << "found XMAS UP at: x = " << (x-2) << ", y = " << (y-2) <<std::endl;
-        sum++;
-    }
-
-    if (lines[y+1][x] == 'M' && lines[y+2][x] == 'A' && lines[y+3][x] == 'S'){
-        //std::cout << "found XMAS DOWN at: x = " << (x-2) << ", y = " << (y-2) <<std::endl;
-        sum++;
-    }
-
-    return sum;
-}
-
-int searchDiagRight(std::vector<std::vector<char>>& lines, int x, int y){
-    int sum{};
-    if (lines[y-1][x-1] == 'M' && lines[y-2][x-2] == 'A' && lines[y-3][x-3] == 'S'){
-        //std::cout << "found XMAS DIAG-RIGHT UP at: x = " << (x-2) << ", y = " << (y-2) <<std::endl;
-        sum++;
-    }
-
-    if (lines[y+1][x+1] == 'M' && lines[y+2][x+2] == 'A' && lines[y+3][x+3] == 'S'){
-        //std::cout << "found XMAS DIAG-RIGHT DOWN at: x = " << (x-2) << ", y = " << (y-2) <<std::endl;
-        sum++;
-    }
-
-    return sum;
-}
-
-int searchDiagLeft(std::vector<std::vector<char>>& lines, int x, int y){
-    int sum{};
-    if (lines[y+1][x-1] == 'M' && lines[y+2][x-2] == 'A' && lines[y+3][x-3] == 'S'){
-        //std::cout << "found XMAS DIAG-LEFT DOWN at: x = " << (x-2) << ", y = " << (y-2) <<std::endl;
-        sum++;
-    }
-
-    if (lines[y-1][x+1] == 'M' && lines[y-2][x+2] == 'A' && lines[y-3][x+3] == 'S'){
-        //std::cout << "found XMAS DIAG-LEFT UP at: x = " << (x-2) << ", y = " << (y-2) <<std::endl;
-        sum++;
-    }
-
-    return sum;
-}
-
+// Declarations 
+// Part 1
+int searchLeftRight(std::vector<std::vector<char>>&, int&, int&);
+int searchUpDown(std::vector<std::vector<char>>&, int&, int&);
+int searchDiagRight(std::vector<std::vector<char>>&, int&, int&);
+int searchDiagLeft(std::vector<std::vector<char>>&, int&, int&);
+//Part2
+int searchAround(std::vector<std::vector<char>>&, int&, int&);
 
 
 int part1(std::vector<std::vector<char>>& lines) {
@@ -88,14 +35,6 @@ int part1(std::vector<std::vector<char>>& lines) {
     return sum;
 }
 
-//
-// .......
-// ..1.2..
-// ...A...
-// ..3.4..
-// .......
-//
-
 int part2(std::vector<std::vector<char>> &lines){
 
     int sum{};
@@ -105,18 +44,7 @@ int part2(std::vector<std::vector<char>> &lines){
         for (int x = 0; x < lines[0].size(); x++){
 
             if (lines[y][x] == 'A'){
-                if ((lines[y - 1][x - 1] == 'M') && (lines[y - 1][x + 1] == 'S') && (lines[y + 1][x - 1] == 'M') && (lines[y + 1][x + 1] == 'S')){
-                    sum++;
-                }
-                if ((lines[y - 1][x - 1] == 'M') && (lines[y - 1][x + 1] == 'M') && (lines[y + 1][x - 1] == 'S') && (lines[y + 1][x + 1] == 'S')){
-                    sum++;
-                }
-                if ((lines[y - 1][x - 1] == 'S') && (lines[y - 1][x + 1] == 'S') && (lines[y + 1][x - 1] == 'M') && (lines[y + 1][x + 1] == 'M')){
-                    sum++;
-                }
-                if ((lines[y - 1][x - 1] == 'S') && (lines[y - 1][x + 1] == 'M') && (lines[y + 1][x - 1] == 'S') && (lines[y + 1][x + 1] == 'M')){
-                    sum++;
-                }
+                sum += searchAround(lines, x, y);
             }
         }
     }
@@ -135,6 +63,8 @@ void day4()
     while (std::getline(input, line)){
         std::vector<char> temp;
 
+        // Adding buffer around the puzzle input
+        // to fix out of range issues when searching
         temp.push_back('.');
         temp.push_back('.');
         temp.push_back('.');
@@ -143,6 +73,8 @@ void day4()
             temp.push_back(a);
         }
 
+        // Adding buffer around the puzzle input
+        // to fix out of range issues when searching
         temp.push_back('.');
         temp.push_back('.');
         temp.push_back('.');
@@ -150,21 +82,23 @@ void day4()
         lines.push_back(temp);
     }
 
+    // Adding buffer around the puzzle input
+    // to fix out of range issues when searching
+    {
+        std::vector<char> temp;
 
+            for(auto c:lines[0]){
+                temp.push_back('.');
+            }
 
-    std::vector<char> temp;
-        for(auto c:lines[0]){
-            temp.push_back('.');
-        }
-    lines.push_back(temp);
-    lines.push_back(temp);
-    lines.push_back(temp);
+        lines.push_back(temp);
+        lines.push_back(temp);
+        lines.push_back(temp);
 
-    lines.insert(lines.begin(), temp);
-    lines.insert(lines.begin(), temp);
-    lines.insert(lines.begin(), temp);
-
-
+        lines.insert(lines.begin(), temp);
+        lines.insert(lines.begin(), temp);
+        lines.insert(lines.begin(), temp);
+    }
     
     input.close();
 
@@ -173,4 +107,72 @@ void day4()
 
     std::cout << "part 1: " << sum1 << std::endl;
     std::cout << "part 2: " << sum2 << std::endl;
+}
+
+int searchLeftRight(std::vector<std::vector<char>>& lines, int& x, int& y){
+
+    int sum{};
+
+    if (lines[y][x-1] == 'M' && lines[y][x-2] == 'A' && lines[y][x-3] == 'S')
+        sum++;
+      
+    if (lines[y][x+1] == 'M' && lines[y][x+2] == 'A' && lines[y][x+3] == 'S')
+        sum++;
+
+    return sum;
+}
+
+int searchUpDown(std::vector<std::vector<char>>& lines, int& x, int& y){
+
+    int sum{};
+
+    if (lines[y-1][x] == 'M' && lines[y-2][x] == 'A' && lines[y-3][x] == 'S')
+        sum++;
+
+    if (lines[y+1][x] == 'M' && lines[y+2][x] == 'A' && lines[y+3][x] == 'S')
+        sum++;
+
+    return sum;
+}
+
+int searchDiagRight(std::vector<std::vector<char>>& lines, int &x, int& y){
+    int sum{};
+    if (lines[y-1][x-1] == 'M' && lines[y-2][x-2] == 'A' && lines[y-3][x-3] == 'S')
+        sum++;
+
+    if (lines[y+1][x+1] == 'M' && lines[y+2][x+2] == 'A' && lines[y+3][x+3] == 'S')
+        sum++;
+
+    return sum;
+}
+
+int searchDiagLeft(std::vector<std::vector<char>>& lines, int& x, int& y){
+    int sum{};
+    if (lines[y+1][x-1] == 'M' && lines[y+2][x-2] == 'A' && lines[y+3][x-3] == 'S')
+        sum++;
+
+    if (lines[y-1][x+1] == 'M' && lines[y-2][x+2] == 'A' && lines[y-3][x+3] == 'S')
+        sum++;
+
+    return sum;
+}
+
+int searchAround(std::vector<std::vector<char>>& lines, int& x, int& y){
+
+    int sum{};
+
+    if ((lines[y - 1][x - 1] == 'M') && (lines[y - 1][x + 1] == 'S') && (lines[y + 1][x - 1] == 'M') && (lines[y + 1][x + 1] == 'S')){
+        sum++;
+    }
+    if ((lines[y - 1][x - 1] == 'M') && (lines[y - 1][x + 1] == 'M') && (lines[y + 1][x - 1] == 'S') && (lines[y + 1][x + 1] == 'S')){
+        sum++;
+    }
+    if ((lines[y - 1][x - 1] == 'S') && (lines[y - 1][x + 1] == 'S') && (lines[y + 1][x - 1] == 'M') && (lines[y + 1][x + 1] == 'M')){
+        sum++;
+    }
+    if ((lines[y - 1][x - 1] == 'S') && (lines[y - 1][x + 1] == 'M') && (lines[y + 1][x - 1] == 'S') && (lines[y + 1][x + 1] == 'M')){
+        sum++;
+    }
+
+    return sum;
 }
