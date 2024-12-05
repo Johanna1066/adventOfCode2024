@@ -8,11 +8,13 @@
 
 
 // Declarations 
+
 // Part 1
 int searchLeftRight(std::vector<std::vector<char>>&, int&, int&);
 int searchUpDown(std::vector<std::vector<char>>&, int&, int&);
 int searchDiagRight(std::vector<std::vector<char>>&, int&, int&);
 int searchDiagLeft(std::vector<std::vector<char>>&, int&, int&);
+
 //Part2
 int searchAround(std::vector<std::vector<char>>&, int&, int&);
 
