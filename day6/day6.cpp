@@ -37,6 +37,12 @@ int part1(std::vector<std::vector<char>> map, std::pair<int,int>& startPosition)
 
         if (nextChar == '#'){
             direction = ( ( direction + 1 ) % 4 );
+            // Special case when turning straight into another #
+            char nextNextChar =  map[currentPosition.first + directions[direction].first]
+                                [currentPosition.second + directions[direction].second];
+            if(nextNextChar == '#'){
+                direction = ( ( direction + 1 ) % 4 );
+            }
         }
 
         // Update position and the char in that position
@@ -74,6 +80,8 @@ bool part2(std::vector<std::vector<char>> map, std::pair<int,int>& startPosition
 
         if (nextChar == '#'){
             direction = ( ( direction + 1 ) % 4 );
+            
+            // Special case when turning straight into another #
             char nextNextChar =  map[currentPosition.first + directions[direction].first]
                                 [currentPosition.second + directions[direction].second];
             if(nextNextChar == '#'){
@@ -81,6 +89,7 @@ bool part2(std::vector<std::vector<char>> map, std::pair<int,int>& startPosition
             }
         }
 
+        // more than double the times it took to exit the guard to exit the original map
         if (itterations > 10000){
             return false;
         }
@@ -107,6 +116,9 @@ void day6()
 
     std::vector<std::vector<char>> map;
     std::pair<int,int> startPosition{};
+
+    // Working with 1-indexed map since I add a 'fence' of 
+    // '-' around the whole map
     int posX{1}, posY{1};
 
     while (std::getline(input, line)){
@@ -153,26 +165,26 @@ void day6()
     sum1 = part1(map, startPosition);
 
 
-for (size_t i = 0; i < map.size(); ++i) {
-    auto& y = map[i];
+    for (size_t i = 0; i < map.size(); ++i) {
+        auto& y = map[i];
 
-    if (y[3] == '-')
-        continue;
+        if (y[3] == '-')
+            continue;
 
-    for (size_t j = 0; j < y.size(); ++j) {
-        auto& x = y[j];
+        for (size_t j = 0; j < y.size(); ++j) {
+            auto& x = y[j];
 
-        if (x == '.') {
-            x = '#';
+            if (x == '.') {
+                x = '#';
 
-            if (!part2(map, startPosition)) {
-                sum2++;
-                std::cout << "Found loop at: (" << i << ", " << j << ")" << std::endl;
+                if (!part2(map, startPosition)) {
+                    sum2++;
+                    std::cout << "Found loop at: (" << i << ", " << j << ")" << std::endl;
+                }
+                x = '.';
             }
-            x = '.';
         }
     }
-}
 
     std::cout << "part 1: " << sum1 << std::endl;
     std::cout << "part 2: " << sum2 << std::endl;
