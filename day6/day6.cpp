@@ -11,8 +11,8 @@ int part1(std::vector<std::vector<char>> map, std::pair<int,int>& startPosition)
 
     int sum{};
 
-    // N, E, S, W
-    std::pair<int,int> directions[4]{{-1,0},{0,1},{1,0},{0,-1}};
+    // N, E, S, W ({y,x})
+    std::pair<int,int> directions[4]{{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
     int direction = 0;
 
     // first = y-coordinate, second = x-coordinate
@@ -49,13 +49,57 @@ int part1(std::vector<std::vector<char>> map, std::pair<int,int>& startPosition)
     return sum;
 }
 
-bool part2() {
+bool part2(std::vector<std::vector<char>> map, std::pair<int,int>& startPosition) {
+
+    int itterations{};
+
+    // N, E, S, W ({y,x})
+    std::pair<int,int> directions[4]{{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+    int direction = 0;
+
+    // first = y-coordinate, second = x-coordinate
+    std::pair<int,int> currentPosition = startPosition;
+
+    char currentChar = map[currentPosition.first][currentPosition.second];
+    char nextChar =  map[currentPosition.first + directions[direction].first]
+                        [currentPosition.second + directions[direction].second];
+
+    do {
+        nextChar =  map[currentPosition.first + directions[direction].first]
+                       [currentPosition.second + directions[direction].second];
+
+        if(nextChar == '-'){
+            return true;
+        }
+
+        if (nextChar == '#'){
+            direction = ( ( direction + 1 ) % 4 );
+            char nextNextChar =  map[currentPosition.first + directions[direction].first]
+                                [currentPosition.second + directions[direction].second];
+            if(nextNextChar == '#'){
+                direction = ( ( direction + 1 ) % 4 );
+            }
+        }
+
+        if (itterations > 10000){
+            return false;
+        }
+
+        // Update position and the char in that position
+        currentPosition.first = currentPosition.first + directions[direction].first;
+        currentPosition.second = currentPosition.second + directions[direction].second;
+        currentChar = map[currentPosition.first][currentPosition.second];
+
+        itterations++;
+
+    } while (currentChar != '-');
+
     return true;
 }
 
 void day6()
 {
-    std::string fileURL = "../day6/testInputDay6.txt";
+    std::string fileURL = "../day6/inputDay6.txt";
     std::ifstream input = readFile(fileURL);
 
     std::string line;
@@ -106,8 +150,29 @@ void day6()
     map.push_back(temp);
     map.insert(map.begin(), temp);
     
-
     sum1 = part1(map, startPosition);
+
+
+for (size_t i = 0; i < map.size(); ++i) {
+    auto& y = map[i];
+
+    if (y[3] == '-')
+        continue;
+
+    for (size_t j = 0; j < y.size(); ++j) {
+        auto& x = y[j];
+
+        if (x == '.') {
+            x = '#';
+
+            if (!part2(map, startPosition)) {
+                sum2++;
+                std::cout << "Found loop at: (" << i << ", " << j << ")" << std::endl;
+            }
+            x = '.';
+        }
+    }
+}
 
     std::cout << "part 1: " << sum1 << std::endl;
     std::cout << "part 2: " << sum2 << std::endl;
